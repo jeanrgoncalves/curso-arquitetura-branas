@@ -8,3 +8,4 @@ Code Smells
 6 - Código morto
 7 - Nomes ruins
 8 - Variáveis declaradas longe da utilização
+9 - teste
