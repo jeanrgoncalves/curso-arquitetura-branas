@@ -7,13 +7,12 @@ beforeEach(async () => {
     await deleteAccounts();
 });
 
-
 describe('POST /signup', () => {
     it('should return 200 for successful signup a passenger', async () => {
         let payload = {
-            name: 'Jean Rafael Gonçalves',
-            email: 'jeanrgoncalves@hotmail.com',
-            cpf: "40688413811",
+            name: 'Abel Ferreira',
+            email: 'abel@hotmail.com',
+            cpf: "96889667034",
             isPassenger: true,
             password: "123"
         };
@@ -30,9 +29,9 @@ describe('POST /signup', () => {
 
     it('should return 200 for successful signup a driver', async () => {
         let payload = {
-            name: 'Leticia Bernusse Gonçalves',
-            email: 'bernusse@hotmail.com',
-            cpf: "40146896890",
+            name: 'Raphael Veiga',
+            email: 'veiga@hotmail.com',
+            cpf: "02268127079",
             isDriver: true,
             carPlate: "CUH9160",
             password: "123"
@@ -51,9 +50,9 @@ describe('POST /signup', () => {
 
     it('should return 422 for email already used', async () => {
         let payload = {
-            name: 'Alice Gonçalves',
-            email: 'alice@hotmail.com',
-            cpf: "40688413811",
+            name: 'Weveton Wev',
+            email: 'wev@hotmail.com',
+            cpf: "96889667034",
             isPassenger: true,
             password: "123"
         }
@@ -73,8 +72,8 @@ describe('POST /signup', () => {
     ])('should return 422 for invalid name', async (name: any) => {
         let payload = {
             name: name,
-            email: 'alice@hotmail.com',
-            cpf: "40688413811",
+            email: 'wev@hotmail.com',
+            cpf: "96889667034",
             isPassenger: true,
             password: "123"
         }
@@ -89,12 +88,12 @@ describe('POST /signup', () => {
         null,
         undefined,
         "",
-        "alice_hotmail.com"
+        "wev_hotmail.com"
     ])('should return 422 for invalid email', async (email: any) => {
         let payload = {
-            name: 'Alice Gonçalves',
+            name: 'Weveton Wev',
             email: email,
-            cpf: "40688413811",
+            cpf: "96889667034",
             isPassenger: true,
             password: "123"
         }
@@ -112,8 +111,8 @@ describe('POST /signup', () => {
         "40688413845"
     ])('should return 422 for invalid cpf', async (cpf: any) => {
         let payload = {
-            name: 'Alice Gonçalces',
-            email: 'alice@hotmail.com',
+            name: 'Weverton Wev',
+            email: 'wev@hotmail.com',
             cpf: cpf,
             isPassenger: true,
             password: "123"
@@ -132,9 +131,9 @@ describe('POST /signup', () => {
         "CUH9i60"
     ])('should return 422 for invalid car plate', async (carPlate) => {
         let payload = {
-            name: 'Alice Gonçalces',
-            email: 'alice@hotmail.com',
-            cpf: "40688413811",
+            name: 'Weverton Wev',
+            email: 'wev@hotmail.com',
+            cpf: "96889667034",
             isDriver: true,
             carPlate: carPlate,
             password: "123"
