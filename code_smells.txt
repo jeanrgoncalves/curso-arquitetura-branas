@@ -1,10 +1,10 @@
 Code Smells
 
-1 - Linha em branco
-2 - Excesso de condições
-3 - Tratamento inadequado de errors
-4 - Longa cadeia de mensagens
-5 - Comentários
-6 - Código morto
-7 - Nomes ruins
-8 - Variáveis declaradas longe da utilização
+1 - Linha em branco - ok
+2 - Excesso de condições - ok
+3 - Tratamento inadequado de errors - ok
+4 - Longa cadeia de mensagens - ok
+5 - Comentários - ok
+6 - Código morto - ok
+7 - Nomes ruins - ok
+8 - Variáveis declaradas longe da utilização - ok

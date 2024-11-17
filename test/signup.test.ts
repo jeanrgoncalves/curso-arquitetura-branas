@@ -1,7 +1,7 @@
-import signup from "../src/signup";
-import account from "../src/account";
-import request from 'supertest';
 import pgp from "pg-promise";
+import request from 'supertest';
+import account from "../src/account";
+import signup from "../src/signup";
 
 beforeEach(async () => {
     await deleteAccounts();
