@@ -174,5 +174,6 @@ function assertAccountCommonFields(responseAccount: any, accountId: any, payload
 async function deleteAccounts() {
     const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
     await connection.query("delete from ccca.account");
+    await connection.$pool.end();
 }
 
