@@ -1,20 +1,19 @@
 import pgp from "pg-promise";
-import express from "express";
-import { Account } from "./model/account";
+import { Router } from 'express';
+import { AccountModel } from "./account.model";
 
-const app = express();
-app.use(express.json());
+const router = Router();
 
 const URL_DB = "postgres://postgres:123456@localhost:5432/app"
 
-app.get("/account/:idAccount", async function (req, res) {
+router.get("/account/:idAccount", async function (req, res) {
     const connection = pgp()(URL_DB);
     try {
         const idAccount = req.params.idAccount;
         let account = await connection.oneOrNone("select * from ccca.account where account_id = $1", [idAccount]);
         if (!account)
             return res.status(404).json({ error: "Account not found" });
-        res.json(new Account(
+        res.json(new AccountModel(
             account.account_id,
             account.name,
             account.email,
@@ -29,4 +28,9 @@ app.get("/account/:idAccount", async function (req, res) {
     }
 });
 
-export default app;
+// ISP - Interface Segregation Principle
+export interface GetAccountData {
+	getAccountById (accountId: string): Promise<any>;
+}
+
+export default router;

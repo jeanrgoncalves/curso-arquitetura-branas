@@ -1,4 +1,4 @@
-export class Account {
+export class AccountModel {
     constructor(
         private id: String,
         private name: String,

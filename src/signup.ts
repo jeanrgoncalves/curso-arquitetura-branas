@@ -1,14 +1,13 @@
 import crypto from "crypto";
-import express from "express";
+import { Router } from 'express';
 import pgp from "pg-promise";
 import { validateCpf } from "./validateCpf";
 
-const app = express();
-app.use(express.json());
+const router = Router();
 
 const URL_DB = "postgres://postgres:123456@localhost:5432/app"
 
-app.post("/signup", async function (request, response) {
+router.post("/signup", async function (request, response) {
 	const connection = pgp()(URL_DB);
 	try {
 		const input = request.body;
@@ -55,4 +54,10 @@ async function insertAccountAndCreateResult(connection: any, input: any) {
 	};
 }
 
-export default app;
+// ISP - Interface Segregation Principle
+export interface SignupData {
+	saveAccount (account: any): Promise<any>;
+	getAccountByEmail (email: string): Promise<any>;
+}
+
+export default router;

@@ -1,17 +1,11 @@
+import axios from "axios";
 import pgp from "pg-promise";
-import request from 'supertest';
-import account from "../src/account";
-import signup from "../src/signup";
-
-beforeEach(async () => {
-    await deleteAccounts();
-});
 
 describe('POST /signup', () => {
     it('should return 200 for successful signup a passenger', async () => {
         let payload = {
             name: 'Abel Ferreira',
-            email: 'abel@hotmail.com',
+            email: `abel${Math.random()}@hotmail.com`,
             cpf: "96889667034",
             isPassenger: true,
             password: "123"
@@ -20,17 +14,17 @@ describe('POST /signup', () => {
         const responseSignup = await requestSignup(payload);
         assertSignupResponse(responseSignup);
 
-        let accountId = responseSignup.body.accountId;
+        let accountId = responseSignup.data.accountId;
         const responseAccount = await requestGetAccount(accountId);
 
         assertAccountCommonFields(responseAccount, accountId, payload);
-        expect(responseAccount.body).toHaveProperty('isPassenger', payload.isPassenger);
+        expect(responseAccount.data).toHaveProperty('isPassenger', payload.isPassenger);
     });
 
     it('should return 200 for successful signup a driver', async () => {
         let payload = {
             name: 'Raphael Veiga',
-            email: 'veiga@hotmail.com',
+            email: `veiga${Math.random()}@hotmail.com`,
             cpf: "02268127079",
             isDriver: true,
             carPlate: "CUH9160",
@@ -40,28 +34,33 @@ describe('POST /signup', () => {
         const responseSignup = await requestSignup(payload);
         assertSignupResponse(responseSignup);
 
-        let accountId = responseSignup.body.accountId;
+        let accountId = responseSignup.data.accountId;
         const responseAccount = await requestGetAccount(accountId);
 
         assertAccountCommonFields(responseAccount, accountId, payload);
-        expect(responseAccount.body).toHaveProperty('isDriver', payload.isDriver);
-        expect(responseAccount.body).toHaveProperty('carPlate', payload.carPlate);
+        expect(responseAccount.data).toHaveProperty('isDriver', payload.isDriver);
+        expect(responseAccount.data).toHaveProperty('carPlate', payload.carPlate);
     });
 
     it('should return 422 for email already used', async () => {
         let payload = {
             name: 'Weveton Wev',
-            email: 'wev@hotmail.com',
+            email: `wev${Math.random()}@hotmail.com`,
             cpf: "96889667034",
             isPassenger: true,
             password: "123"
         }
 
         await requestSignup(payload);
-        const response = await requestSignup(payload);
+        let response;
+        try {
+            await requestSignup(payload);
+        } catch (error: any) {
+            response = error.response;
+        }
 
         expect(response.status).toBe(422);
-        expect(response.body).toHaveProperty('message', 'It already exists an account for this email.');
+        expect(response.data).toHaveProperty('message', 'It already exists an account for this email.');
     });
 
     test.each([
@@ -78,10 +77,15 @@ describe('POST /signup', () => {
             password: "123"
         }
 
-        const response = await requestSignup(payload);
+        let response;
+        try {
+            await requestSignup(payload);
+        } catch (error: any) {
+            response = error.response;
+        }
 
         expect(response.status).toBe(422);
-        expect(response.body).toHaveProperty('message', 'Ivalid name.');
+        expect(response.data).toHaveProperty('message', 'Ivalid name.');
     });
 
     test.each([
@@ -98,10 +102,15 @@ describe('POST /signup', () => {
             password: "123"
         }
 
-        const response = await requestSignup(payload);
+        let response;
+        try {
+            await requestSignup(payload);
+        } catch (error: any) {
+            response = error.response;
+        }
 
         expect(response.status).toBe(422);
-        expect(response.body).toHaveProperty('message', 'Invalid email.');
+        expect(response.data).toHaveProperty('message', 'Invalid email.');
     });
 
     test.each([
@@ -118,10 +127,15 @@ describe('POST /signup', () => {
             password: "123"
         }
 
-        const response = await requestSignup(payload);
+        let response;
+        try {
+            await requestSignup(payload);
+        } catch (error: any) {
+            response = error.response;
+        }
 
         expect(response.status).toBe(422);
-        expect(response.body).toHaveProperty('message', 'Invalid cpf.');
+        expect(response.data).toHaveProperty('message', 'Invalid cpf.');
     });
 
     test.each([
@@ -139,36 +153,38 @@ describe('POST /signup', () => {
             password: "123"
         }
 
-        const response = await requestSignup(payload);
+        let response;
+        try {
+            await requestSignup(payload);
+        } catch (error: any) {
+            response = error.response;
+        }
 
         expect(response.status).toBe(422);
-        expect(response.body).toHaveProperty('message', 'Invalid car plate.');
+        expect(response.data).toHaveProperty('message', 'Invalid car plate.');
     });
 
 });
 
 async function requestSignup(payload: any): Promise<any> {
-    return await request(signup)
-        .post('/signup')
-        .send(payload);
+    return await axios.post("http://localhost:3000/signup", payload);
 }
 
 async function requestGetAccount(accountId: String): Promise<any> {
-    return await request(account)
-        .get('/account/' + accountId);
+    return await axios.get("http://localhost:3000/account/" + accountId);
 }
 
 function assertSignupResponse(responseSignup: any) {
     expect(responseSignup.status).toBe(200);
-    expect(responseSignup.body).toHaveProperty('accountId');
+    expect(responseSignup.data).toHaveProperty('accountId');
 }
 
 function assertAccountCommonFields(responseAccount: any, accountId: any, payload: any) {
-    expect(responseAccount.body).toHaveProperty('id', accountId);
-    expect(responseAccount.body).toHaveProperty('name', payload.name);
-    expect(responseAccount.body).toHaveProperty('email', payload.email);
-    expect(responseAccount.body).toHaveProperty('cpf', payload.cpf);
-    expect(responseAccount.body).toHaveProperty('password', payload.password);
+    expect(responseAccount.data).toHaveProperty('id', accountId);
+    expect(responseAccount.data).toHaveProperty('name', payload.name);
+    expect(responseAccount.data).toHaveProperty('email', payload.email);
+    expect(responseAccount.data).toHaveProperty('cpf', payload.cpf);
+    expect(responseAccount.data).toHaveProperty('password', payload.password);
 }
 
 async function deleteAccounts() {
