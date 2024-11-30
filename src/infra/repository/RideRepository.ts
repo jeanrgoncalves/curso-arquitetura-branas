@@ -4,6 +4,8 @@ export default interface RideRepository  {
     passengerHasRideInProgress(passengerId: String): Promise<Boolean>
     createRide(ride: any): Promise<any>
     getRideById(rideId: String): Promise<any>
+    hasActiveRideByDriverId(driverId: String): Promise<Boolean>
+    driverAcceptsRide(rideId: string, driverId: string): Promise<void>
 }
 
 export default class RideRepositoryDatabase implements RideRepository {
@@ -23,6 +25,7 @@ export default class RideRepositoryDatabase implements RideRepository {
 
     async getRideById(rideId: String): Promise<any> {
         const [ride] = await this.connection.query("select * from ccca.ride where ride_id = $1", [rideId]);
+        if (!ride) return null;
         return {
             rideId: ride.ride_id,
             passengerId: ride.passenger_id,
@@ -38,4 +41,14 @@ export default class RideRepositoryDatabase implements RideRepository {
         }
     }
 
+    async hasActiveRideByDriverId(driverId: String): Promise<Boolean> {
+        const [rides] = await this.connection.query("select * from ccca.ride where driver_id = $1 and status in ('ACCEPTED', 'IN_PROGRESS')", [driverId]);
+        return !!rides; 
+    }
+
+    async driverAcceptsRide(rideId: string, driverId: string): Promise<void> {
+        await this.connection.query("update ccca.ride set driver_id = $1, status = 'ACCEPTED' where ride_id = $2", [driverId, rideId])
+    }
+    
 }
+
