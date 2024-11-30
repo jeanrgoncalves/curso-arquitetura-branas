@@ -1,8 +1,9 @@
 import AccountDAO from "../../account.data";
+import RideRepository from "../../infra/repository/RideRepository";
 import RideUtils from "../../utils/ride.utils";
 
 export default class RequestRide {
-    constructor(readonly accountDAO: AccountDAO, readonly rideData: RequestRideData) {}
+    constructor(readonly accountDAO: AccountDAO, readonly rideRepository: RideRepository) {}
 
     async requestRide(input: any) {
         const ride: any = {
@@ -17,12 +18,12 @@ export default class RequestRide {
         await this.validatePassenger(ride);
         await this.validateRideInProgress(ride);
 
-        ride.status = "CREATED";
+        ride.status = "REQUESTED";
         ride.fare = 10;
         ride.distance = RideUtils.calcDistance(ride.fromLat, ride.fromLong, ride.toLat, ride.toLong);
         ride.date = new Date();
 
-        await this.rideData.createRide(ride)
+        await this.rideRepository.createRide(ride)
 
         return {rideId: ride.id}
     }
@@ -34,13 +35,9 @@ export default class RequestRide {
     }
 
     async validateRideInProgress(ride: any) {
-        if (await this.rideData.passengerHasRideInProgress(ride.passengerId))
+        if (await this.rideRepository.passengerHasRideInProgress(ride.passengerId))
             throw new Error("Passenger already has a ride in progress")
     }
     
 }
 
-export interface RequestRideData {
-    passengerHasRideInProgress(passengerId: String): Promise<Boolean>
-    createRide(ride: any): Promise<any>
-}

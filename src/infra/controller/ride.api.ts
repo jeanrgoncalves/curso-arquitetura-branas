@@ -1,8 +1,9 @@
-import { AccountDAODatabase } from "../../account.data";
-import RideDAODatabase from "../../data/ride/ride.dao";
-import GetRide from "../../service/ride/getRide";
-import RequestRide from "../../service/ride/requestRide";
 import { Router } from 'express';
+import { AccountDAODatabase } from "../../account.data";
+import GetRide from "../../application/usecase/getRide";
+import { PgPromiseAdapter } from "../database/DatabaseConnection";
+import RideRepository from "../repository/RideRepository";
+import RequestRide from '../../application/usecase/requestRide';
 
 const router = Router();
 
@@ -11,9 +12,10 @@ router.post("/ride", async function (request, response) {
     console.log(input)
 
     try {
+        const databaseConnection = new PgPromiseAdapter()
         const accountDAO = new AccountDAODatabase();
-        const rideDAODatabase = new RideDAODatabase();
-        const requestRide = new RequestRide(accountDAO, rideDAODatabase);
+        const rideRepository = new RideRepository(databaseConnection);
+        const requestRide = new RequestRide(accountDAO, rideRepository);
         const output = await requestRide.requestRide(input);
         response.json(output);        
     } catch(e: any) {
@@ -25,7 +27,8 @@ router.get("/ride/:rideId", async function (request, response) {
     const rideId = request.params.rideId;
     console.log(rideId);
 
-    const getRide = new GetRide(new AccountDAODatabase(), new RideDAODatabase())
+    const databaseConnection = new PgPromiseAdapter()
+    const getRide = new GetRide(new AccountDAODatabase(), new RideRepository(databaseConnection));
     const output = await getRide.getRide(rideId)
     response.json(output);
 });

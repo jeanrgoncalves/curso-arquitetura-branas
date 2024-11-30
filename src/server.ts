@@ -1,6 +1,6 @@
 import signup from "../src/signup";
 import account from "../src/account"
-import rideApi from "./api/ride/ride.api"
+import rideApi from "./infra/controller/ride.api"
 import express from "express";
 
 const app = express();

@@ -1,10 +1,11 @@
 import AccountDAO from "../../account.data";
+import RideRepository from "../../infra/repository/RideRepository";
 
 export default class GetRide {
-    constructor(readonly accountDAO: AccountDAO, readonly rideData: GetRideData){}
+    constructor(readonly accountDAO: AccountDAO, readonly rideRepository: RideRepository){}
 
     async getRide(rideId: String): Promise<any> {
-        const ride = await this.rideData.getRideById(rideId);
+        const ride = await this.rideRepository.getRideById(rideId);
         const passenger = await this.accountDAO.getAccountById(ride.passengerId);
         const driver = await this.accountDAO.getAccountById(ride.driverId);
         
@@ -13,8 +14,4 @@ export default class GetRide {
 
         return {ride: ride}
     }
-}
-
-export interface GetRideData {
-    getRideById(rideId: String): Promise<any>
 }
