@@ -1,6 +1,6 @@
-import AccountDAO from "../../account.data";
-import RideRepository from "../../infra/repository/RideRepository";
-import RideUtils from "../../utils/ride.utils";
+import AccountDAO from "../../../account.data";
+import RideRepository from "../../../infra/repository/RideRepository";
+import RideUtils from "../../../utils/ride.utils";
 
 export default class RequestRide {
     constructor(readonly accountDAO: AccountDAO, readonly rideRepository: RideRepository) {}

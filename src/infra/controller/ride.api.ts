@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { AccountDAODatabase } from "../../account.data";
-import GetRide from "../../application/usecase/getRide";
+import GetRide from "../../application/usecase/ride/GetRide";
 import { PgPromiseAdapter } from "../database/DatabaseConnection";
 import RideRepository from "../repository/RideRepository";
-import RequestRide from '../../application/usecase/requestRide';
-import AcceptRide from '../../application/usecase/AcceptRide';
+import RequestRide from '../../application/usecase/ride/RequestRide';
+import AcceptRide from '../../application/usecase/ride/AcceptRide';
+import StartRide from '../../application/usecase/ride/StartRide';
 
 const router = Router();
 
@@ -49,6 +50,23 @@ router.post("/ride/:rideId/accept", async function (request, response) {
             rideId: rideId,
             driverId: driverId
         });
+        response.sendStatus(200);
+    } catch (e: any) {
+        response.status(422).json({ message: e.message });
+    }
+    
+});
+
+router.post("/ride/:rideId/start", async function (request, response) {
+    const rideId = request.params.rideId;
+    console.log(`rideId: ${rideId}`)
+
+    const databaseConnection = new PgPromiseAdapter()
+    const rideRepository = new RideRepository(databaseConnection);
+    const startRide = new StartRide(rideRepository);
+    
+    try {
+        await startRide.execute(rideId);
         response.sendStatus(200);
     } catch (e: any) {
         response.status(422).json({ message: e.message });

@@ -1,5 +1,5 @@
-import AccountDAO from "../../account.data";
-import RideRepository from "../../infra/repository/RideRepository";
+import AccountDAO from "../../../account.data";
+import RideRepository from "../../../infra/repository/RideRepository";
 
 export default class AcceptRide {
     constructor(readonly accountDAO: AccountDAO, readonly rideRepository: RideRepository) {}
@@ -8,7 +8,7 @@ export default class AcceptRide {
         await this.validateDriver(input.driverId);
         await this.validateRide(input.rideId);
         await this.validateDriverRides(input.driverId);
-        await this.rideRepository.driverAcceptsRide(input.rideId, input.driverId);
+        await this.rideRepository.updateStatusAndDriver(input.rideId, input.driverId);
     }
 
     async validateDriver(driverId: string) {
@@ -20,7 +20,7 @@ export default class AcceptRide {
     async validateRide(rideId: string) {
         const ride = await this.rideRepository.getRideById(rideId);
         if (ride.status != "REQUESTED")
-            throw new Error("The ride must be in the REQUESTED status")
+            throw new Error("Ride must be in the REQUESTED status")
     }
 
     async validateDriverRides(driverId :string) {
