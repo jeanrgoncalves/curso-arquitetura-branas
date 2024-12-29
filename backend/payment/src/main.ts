@@ -1,10 +1,10 @@
-import ProcessPayment from "./application/usecase/ProcessPayment";
-import { PgPromiseAdapter } from "./infra/database/DatabaseConnection";
-import Registry from "./infra/di/Registry";
-import ORM from "./infra/orm/ORM";
-import { RabbitMQAdapter } from "./infra/queue/Queue";
-import { RideRepositoryDatabase } from "./infra/repository/RideRepository";
-import { TransactionRepositoryDatabase } from "./infra/repository/TransactionRepository";
+import ProcessPayment from "../src/application/usecase/ProcessPayment";
+import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
+import Registry from "../src/infra/di/Registry";
+import ORM from "../src/infra/orm/ORM";
+import { RabbitMQAdapter } from "../src/infra/queue/Queue";
+import { RideRepositoryDatabase } from "../src/infra/repository/RideRepository";
+import { TransactionRepositoryDatabase } from "../src/infra/repository/TransactionRepository";
 
 // Entry Point - Composition Root
 

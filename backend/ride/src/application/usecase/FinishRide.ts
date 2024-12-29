@@ -24,7 +24,6 @@ export default class FinishRide {
 		const ride = await this.rideRepository.getRideById(input.rideId);
 		ride.register("rideCompleted", async (rideCompleted: RideCompleted) => {
 			await this.rideRepository.updateRide(ride);
-			// await this.mediator.notifyAll(rideCompleted);
 			await this.queue.publish(rideCompleted.event, rideCompleted);
 		});
 		const positions = await this.positionRepository.listByRideId(input.rideId);
