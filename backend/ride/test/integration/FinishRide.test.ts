@@ -12,7 +12,6 @@ import { AxiosAdapter } from "../../src/infra/http/HttpClient";
 import FinishRide from "../../src/application/usecase/FinishRide";
 import { TransactionRepositoryDatabase } from "../../src/infra/repository/TransactionRepository";
 import Registry from "../../src/infra/di/Registry";
-import ProcessPayment from "../../src/application/usecase/ProcessPayment";
 import ORM from "../../src/infra/orm/ORM";
 import Mediator from "../../src/infra/mediator/Mediator";
 import { RabbitMQAdapter } from "../../src/infra/queue/Queue";
@@ -47,7 +46,6 @@ beforeEach(async () => {
     Registry.getInstance().provide("transactionRepository", new TransactionRepositoryDatabase());
     Registry.getInstance().provide("rideRepository", new RideRepositoryDatabase());
     Registry.getInstance().provide("positionRepository", new PositionRepositoryDatabase());
-    Registry.getInstance().provide("processPayment", new ProcessPayment());
     requestRide = new RequestRide();
     acceptRide = new AcceptRide();
     startRide = new StartRide();

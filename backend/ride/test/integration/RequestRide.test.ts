@@ -8,7 +8,6 @@ import AccountGateway, { AccountGatewayHttp } from "../../src/infra/gateway/Acco
 import { AxiosAdapter, FetchAdapter } from "../../src/infra/http/HttpClient";
 import AcceptRide from "../../src/application/usecase/AcceptRide";
 import FinishRide from "../../src/application/usecase/FinishRide";
-import ProcessPayment from "../../src/application/usecase/ProcessPayment";
 import StartRide from "../../src/application/usecase/StartRide";
 import UpdatePosition from "../../src/application/usecase/UpdatePosition";
 import Registry from "../../src/infra/di/Registry";
@@ -34,7 +33,6 @@ beforeEach(async () => {
     Registry.getInstance().provide("transactionRepository", new TransactionRepositoryDatabase());
     Registry.getInstance().provide("rideRepository", new RideRepositoryDatabase());
     Registry.getInstance().provide("positionRepository", new PositionRepositoryDatabase());
-    Registry.getInstance().provide("processPayment", new ProcessPayment());
     requestRide = new RequestRide();
     acceptRide = new AcceptRide();
     startRide = new StartRide();

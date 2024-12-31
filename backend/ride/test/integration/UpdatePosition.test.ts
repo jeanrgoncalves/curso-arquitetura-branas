@@ -10,7 +10,6 @@ import { PositionRepositoryDatabase } from "../../src/infra/repository/PositionR
 import AccountGateway, { AccountGatewayHttp } from "../../src/infra/gateway/AccountGateway";
 import { AxiosAdapter } from "../../src/infra/http/HttpClient";
 import FinishRide from "../../src/application/usecase/FinishRide";
-import ProcessPayment from "../../src/application/usecase/ProcessPayment";
 import Registry from "../../src/infra/di/Registry";
 import ORM from "../../src/infra/orm/ORM";
 import { TransactionRepositoryDatabase } from "../../src/infra/repository/TransactionRepository";
@@ -34,7 +33,6 @@ beforeEach(async () => {
     Registry.getInstance().provide("transactionRepository", new TransactionRepositoryDatabase());
     Registry.getInstance().provide("rideRepository", new RideRepositoryDatabase());
     Registry.getInstance().provide("positionRepository", new PositionRepositoryDatabase());
-    Registry.getInstance().provide("processPayment", new ProcessPayment());
     requestRide = new RequestRide();
     acceptRide = new AcceptRide();
     startRide = new StartRide();

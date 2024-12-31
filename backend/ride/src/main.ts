@@ -1,4 +1,3 @@
-import ProcessPayment from "./application/usecase/ProcessPayment";
 import { PgPromiseAdapter } from "./infra/database/DatabaseConnection";
 import Registry from "./infra/di/Registry";
 import ORM from "./infra/orm/ORM";
@@ -16,9 +15,4 @@ import { TransactionRepositoryDatabase } from "./infra/repository/TransactionRep
     Registry.getInstance().provide("orm", new ORM());
     Registry.getInstance().provide("transactionRepository", new TransactionRepositoryDatabase());
     Registry.getInstance().provide("rideRepository", new RideRepositoryDatabase());
-    Registry.getInstance().provide("processPayment", new ProcessPayment());
-    queue.consume("rideCompleted.processPayment", async function (data: any) {
-        console.log("consumindo processPayment");
-        await Registry.getInstance().inject("processPayment").execute(data);
-    });
 })();
