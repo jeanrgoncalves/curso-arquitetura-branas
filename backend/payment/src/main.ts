@@ -3,7 +3,6 @@ import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
 import Registry from "../src/infra/di/Registry";
 import ORM from "../src/infra/orm/ORM";
 import { RabbitMQAdapter } from "../src/infra/queue/Queue";
-import { RideRepositoryDatabase } from "../src/infra/repository/RideRepository";
 import { TransactionRepositoryDatabase } from "../src/infra/repository/TransactionRepository";
 
 // Entry Point - Composition Root
@@ -15,10 +14,8 @@ import { TransactionRepositoryDatabase } from "../src/infra/repository/Transacti
     Registry.getInstance().provide("connection", new PgPromiseAdapter());
     Registry.getInstance().provide("orm", new ORM());
     Registry.getInstance().provide("transactionRepository", new TransactionRepositoryDatabase());
-    Registry.getInstance().provide("rideRepository", new RideRepositoryDatabase());
     Registry.getInstance().provide("processPayment", new ProcessPayment());
-    queue.consume("rideCompleted.processPayment", async function (data: any) {
-        console.log("consumindo processPayment");
+    queue.consume("rideCompleted.processPayment", async function (data: any) {        
         await Registry.getInstance().inject("processPayment").execute(data);
     });
 })();
