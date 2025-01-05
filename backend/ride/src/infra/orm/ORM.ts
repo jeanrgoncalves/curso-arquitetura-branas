@@ -1,4 +1,3 @@
-import Transaction from "../../domain/entity/Transaction";
 import DatabaseConnection from "../database/DatabaseConnection";
 import { inject } from "../di/Registry";
 

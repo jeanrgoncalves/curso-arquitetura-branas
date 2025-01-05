@@ -12,7 +12,7 @@ import { AxiosAdapter } from "../../src/infra/http/HttpClient";
 import FinishRide from "../../src/application/usecase/FinishRide";
 import Registry from "../../src/infra/di/Registry";
 import ORM from "../../src/infra/orm/ORM";
-import { TransactionRepositoryDatabase } from "../../src/infra/repository/TransactionRepository";
+import { TransactionGatewayHttp } from "../../src/infra/gateway/TransactionGateway";
 
 let connection: DatabaseConnection;
 let requestRide: RequestRide;
@@ -30,7 +30,7 @@ beforeEach(async () => {
     accountGateway = new AccountGatewayHttp();
     Registry.getInstance().provide("accountGateway", accountGateway);
     Registry.getInstance().provide("orm", new ORM());
-    Registry.getInstance().provide("transactionRepository", new TransactionRepositoryDatabase());
+    Registry.getInstance().provide("transactionGateway", new TransactionGatewayHttp());
     Registry.getInstance().provide("rideRepository", new RideRepositoryDatabase());
     Registry.getInstance().provide("positionRepository", new PositionRepositoryDatabase());
     requestRide = new RequestRide();

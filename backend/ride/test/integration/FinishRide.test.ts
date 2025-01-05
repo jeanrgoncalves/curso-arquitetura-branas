@@ -10,11 +10,10 @@ import { PositionRepositoryDatabase } from "../../src/infra/repository/PositionR
 import AccountGateway, { AccountGatewayHttp } from "../../src/infra/gateway/AccountGateway";
 import { AxiosAdapter } from "../../src/infra/http/HttpClient";
 import FinishRide from "../../src/application/usecase/FinishRide";
-import { TransactionRepositoryDatabase } from "../../src/infra/repository/TransactionRepository";
 import Registry from "../../src/infra/di/Registry";
 import ORM from "../../src/infra/orm/ORM";
-import Mediator from "../../src/infra/mediator/Mediator";
 import { RabbitMQAdapter } from "../../src/infra/queue/Queue";
+import { TransactionGatewayHttp } from "../../src/infra/gateway/TransactionGateway";
 
 let connection: DatabaseConnection;
 let requestRide: RequestRide;
@@ -43,7 +42,7 @@ beforeEach(async () => {
     await queue.connect();
     Registry.getInstance().provide("queue", queue);
     Registry.getInstance().provide("orm", new ORM());
-    Registry.getInstance().provide("transactionRepository", new TransactionRepositoryDatabase());
+    Registry.getInstance().provide("transactionGateway", new TransactionGatewayHttp());
     Registry.getInstance().provide("rideRepository", new RideRepositoryDatabase());
     Registry.getInstance().provide("positionRepository", new PositionRepositoryDatabase());
     requestRide = new RequestRide();

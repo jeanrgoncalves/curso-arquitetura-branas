@@ -9,8 +9,7 @@ export default class ProcessPayment {
     constructor () {
     }
 
-    async execute (input: Input): Promise<Output> {
-        console.log("processPayment");
+    async execute(input: Input): Promise<Output> {
         const transaction = Transaction.create(input.rideId, input.amount);
         await this.transactionRepository.saveTransaction(transaction);
         return {

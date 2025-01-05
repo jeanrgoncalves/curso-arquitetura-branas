@@ -1,6 +1,5 @@
 import Position from "../../src/domain/entity/Position";
 import DistanceCalculator from "../../src/domain/service/DistanceCalculator";
-import Coord from "../../src/domain/vo/Coord";
 
 test("Deve calcular a distância entre duas coordenadas", function () {
     const positions = [];

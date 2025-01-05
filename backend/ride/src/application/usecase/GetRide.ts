@@ -1,11 +1,9 @@
 import RideRepository from "../../infra/repository/RideRepository";
-import Coord from "../../domain/vo/Coord";
 import PositionRepository from "../../infra/repository/PositionRepository";
 import DistanceCalculator from "../../domain/service/DistanceCalculator";
-import Ride from "../../domain/entity/Ride";
 import AccountGateway from "../../infra/gateway/AccountGateway";
-import TransactionRepository from "../../infra/repository/TransactionRepository";
 import { inject } from "../../infra/di/Registry";
+import TransactionGateway from "../../infra/gateway/TransactionGateway";
 
 export default class GetRide {
 	@inject("accountGateway")
@@ -14,8 +12,8 @@ export default class GetRide {
 	rideRepository!: RideRepository;
 	@inject("positionRepository")
 	positionRepository!: PositionRepository;
-	@inject("transactionRepository")
-	transactionRepository!: TransactionRepository;
+	@inject("transactionGateway")
+	transactionGateway!: TransactionGateway;
 	
 	constructor () {
 	}
@@ -27,7 +25,7 @@ export default class GetRide {
 		let transaction;
 		if (ride.getStatus() === "completed") {
 			distance = ride.getDistance();
-			transaction = await this.transactionRepository.getTransactionByRideId(rideId);
+			transaction = await this.transactionGateway.getTransactionByRideId(rideId);
 		} else {
 			const positions = await this.positionRepository.listByRideId(rideId);
 			distance = DistanceCalculator.calculateDistanceBetweenPositions(positions)
@@ -46,7 +44,7 @@ export default class GetRide {
 			status: ride.getStatus(),
 			date: ride.date,
 			passengerName: passengerAccount.name,
-			transactionId: transaction?.getTransactionId(),
+			transactionId: transaction?.transactionId,
 			transactionAmount: transaction?.amount,
 			transactionStatus: transaction?.status
 		};

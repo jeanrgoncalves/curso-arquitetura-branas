@@ -18,7 +18,7 @@ test("Deve processar o pagamento", async function () {
         amount: 100
     }
     const outputProcessPayment = await processPayment.execute(inputProcessPayment);
-    const outputGetTransaction = await getTransaction.execute(outputProcessPayment.transactionId);
+    const outputGetTransaction = await getTransaction.byId(outputProcessPayment.transactionId);
     expect(outputGetTransaction.rideId).toBe(inputProcessPayment.rideId);
     expect(outputGetTransaction.amount).toBe(inputProcessPayment.amount);
     await connection.close();

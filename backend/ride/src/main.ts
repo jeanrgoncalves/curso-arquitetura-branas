@@ -1,9 +1,9 @@
 import { PgPromiseAdapter } from "./infra/database/DatabaseConnection";
 import Registry from "./infra/di/Registry";
+import { TransactionGatewayHttp } from "./infra/gateway/TransactionGateway";
 import ORM from "./infra/orm/ORM";
 import { RabbitMQAdapter } from "./infra/queue/Queue";
 import { RideRepositoryDatabase } from "./infra/repository/RideRepository";
-import { TransactionRepositoryDatabase } from "./infra/repository/TransactionRepository";
 
 // Entry Point - Composition Root
 
@@ -13,6 +13,6 @@ import { TransactionRepositoryDatabase } from "./infra/repository/TransactionRep
     Registry.getInstance().provide("queue", queue);
     Registry.getInstance().provide("connection", new PgPromiseAdapter());
     Registry.getInstance().provide("orm", new ORM());
-    Registry.getInstance().provide("transactionRepository", new TransactionRepositoryDatabase());
+    Registry.getInstance().provide("transactionGateway", new TransactionGatewayHttp());
     Registry.getInstance().provide("rideRepository", new RideRepositoryDatabase());
 })();
